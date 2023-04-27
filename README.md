@@ -8,6 +8,16 @@ Usado para acessar Promisses
 then()
 Serve como "então".
 
+try() "tentar"
+
+catch() "pegar"
+
+Para tentar explicar esses métodos, imagine que Você está tentando agendar uma consulta, então você vai "try()" marcar a consulta, a atendente vai procurar um horário, então ela gera uma "prommisse" de consulta. nesse caso não há horário disponível então sua promisse foi rejected, o catch será seu aviso (retorno) que aquele horário está indisponível.
+
+<img src="/img/try.png">
+
+### Código 1
+
 ````ruby
 const consultaCep = fetch('https://viacep.com.br/ws/81250615/json/')
     .then(resposta => resposta.json())
@@ -23,17 +33,64 @@ const consultaCep = fetch('https://viacep.com.br/ws/81250615/json/')
 
 console.log(consultaCep );
 ````
+then()
+o then() vai executar uma função logo depois que sua tarefa terminar
+
+imagina que você está esperando um download baixar, e quando ele terminar o arquivo ja vai abrir direto!
+
+async await
+o async vai dizer que sua tarefa é assíncrona e precisa de mais tempo para terminar
+
+imagina que o download demora um tempo então enquanto ele está sendo feito você pode fazer outras coisas..
+
+o await vai dizer que você deve esperar a tarefa ser concluida para continuar
+
+imagina uma atualização do windows que você nao pode usar o pc até que o download seja concluido.
+
+Então quando eu devo usar then() no lugar de async await?
+
+Primeiramente que o then() não é uma boa prática para seu projeto, ele quebra bastante a legibilidade do código e também quebra a linearidade das tarefas no processador do celular, então o ideal é usa-lo raramente. Já o async/await é mais natural para o processador e mais facil de outros devs entenderem a lógica do seu código.
+
+Uai, então porque vocês ensinam o then()?
+
+É porque inicialmente ele é muuito simples de entender, então para introduzir a dinamica de funções sequenciais ele é ideal didaticamente.
+
+Então a dica que eu te dou é: Se dá pra trocar o then() por um async/await faça, você estará sempre ganhando.
+
+Mais pra frente as coisas vão ficar mais complexas com Estados, que é quando o async/await se sobresai em relação ao then()
+### Código 2
 
 ````ruby
+async function buscaEndereco(cep) {
+    var mensagemErro = documen.getElementById('erro')
+    mensagemErro.innerHTML = "";
+    try {
+        const consultaCep = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        const consultaCepConvertida = await consultaCep.json();
+        if (consultaCepConvertida.erro) {
+            throw Error('CEP não existente')
+        }
+        let cidade = document.getElementById('cidade');
+        let logradouro = document.getElementById('endereco');
+        let estado = document.getElementById('estado');
+        let bairro = document.getElementById('bairro');
+
+        cidade.value = consultaCepConvertida.localidade;
+        logradouro.value = consultaCepConvertida.logradouro;
+        estado.value = consultaCepConvertida.uf;
+        bairro.value = consultaCepConvertida.bairro;
+
+        console.log(consultaCepConvertida);
+        return consultaCepConvertida;
+    } catch (erro) {
+        mensagemErro.innerHTML = `<p>CEP inválido. Tente novamente!</p>`
+        console.log(erro)
+    }
+}
+
+let cep = document.getElementById('cep')
+cep.addEventListener('focus', () => buscaEndereco(cep.value));
 ````
-
-````ruby
-````
-
-````ruby
-````
-
-
 
 Podemos destrinchar o fluxo de execução de tarefas em JavaScript em três partes: Event Loop, Call Stack e Task Queue. O Event Loop é um ciclo que monitora e executa as ações que mandamos para o JavaScript. O processo de leitura do código só é finalizado quando não existem mais ações a serem executadas. A call stack é um mecanismo que organiza como irá funcionar o script quando existem muitas funções: qual função está sendo executada, quais estão sendo chamadas dentro de alguma função, etc. Por fim, a task queue é a fila de tarefas assíncronas. Se algo precisa ocorrer em segundo plano ou mais tarde, é nessa fila que ele será adicionado e executado mais tarde.
 
