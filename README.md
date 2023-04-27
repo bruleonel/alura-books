@@ -1,5 +1,7 @@
 # Anotações
 
+![cep](https://user-images.githubusercontent.com/104650333/235004851-924cca18-65d0-43c8-912a-10eb019114c4.gif)
+
 ## Explicando o código:
 
 fetch()
